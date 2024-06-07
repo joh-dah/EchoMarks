@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapComponent from '../components/MapComponent';
+import App from '../components/App';
 
-export default function App() {
+export default function Main() {
   return (
     <View style={styles.container}>
-      <MapComponent />
+      <App />
     </View>
   );
 }
