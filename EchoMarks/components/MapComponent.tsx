@@ -1,12 +1,23 @@
 import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Image } from 'react-native';
 import MapView, { Marker, MapViewProps } from 'react-native-maps';
+
+interface SoundFile {
+  uri: string;
+  latitude: number;
+  longitude: number;
+}
 
 interface MapComponentProps extends MapViewProps {
   location: { latitude: number; longitude: number } | null;
+  soundFiles: SoundFile[];
+  onSelectSoundFile: (file: SoundFile) => void;
 }
 
-const MapComponent: React.ForwardRefRenderFunction<MapView, MapComponentProps> = ({ location, ...props }, ref) => {
+const MapComponent: React.ForwardRefRenderFunction<MapView, MapComponentProps> = (
+  { location, soundFiles, onSelectSoundFile, ...props },
+  ref
+) => {
   const mapRef = useRef<MapView>(null);
 
   useImperativeHandle(ref, () => mapRef.current);
@@ -36,10 +47,27 @@ const MapComponent: React.ForwardRefRenderFunction<MapView, MapComponentProps> =
           }}
           {...props}
         >
+          {/*User Location Marker*/}
           <Marker
             coordinate={location}
-            pinColor='#8cb7d1'
-          />
+            title="Your Location"
+            anchor={{ x: 0.5, y: 0.5 }}
+            description="This is your current location"
+          >
+            <Image
+              source={require('../assets/images/user_location.png')}
+              style={{ width: 25, height: 25 }}
+            />
+          </Marker>
+            {/* Audio markers */}
+            {soundFiles.map((file, index) => (
+              <Marker
+                key={index}
+                coordinate={{ latitude: file.latitude, longitude: file.longitude }}
+                title={`Audio ${index + 1}`}
+                onPress={() => onSelectSoundFile(file)}
+              />
+              ))}
         </MapView>
       ) : (
         <View style={styles.loadingContainer}>

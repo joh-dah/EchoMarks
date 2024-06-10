@@ -154,7 +154,12 @@ export default function App() {
 
   return (
       <View style={styles.container}>
-        <MapComponent location={location} ref={mapRef} />
+          <MapComponent
+            location={location}
+            soundFiles={soundFiles}
+            onSelectSoundFile={selectSoundFile}
+            ref={mapRef}
+          />
         <RecordingButton
           onPress={recording ? handleStopRecording : handleStartRecording}
           recording={!!recording}
@@ -163,14 +168,14 @@ export default function App() {
         {soundFiles.map((file, index) => (
           <AudioMarker key={index} coordinate={{ latitude: file.latitude, longitude: file.longitude }} onPress={() => setSelectedSoundFile(file)} />
         ))}
-        {selectedSoundFile && (
-          <AudioControl
-            fileName={`Audio ${soundFiles.indexOf(selectedSoundFile) + 1}`}
-            onPlayPause={handlePlayPause}
-            onDelete={handleDelete}
-            isPlaying={isPlaying}
-          />
-        )}
+      {selectedSoundFile && (
+        <AudioControl
+          fileName={`Audio ${soundFiles.indexOf(selectedSoundFile) + 1}`}
+          onPlayPause={playPauseSound}
+          onDelete={() => deleteSoundFile(selectedSoundFile)}
+          isPlaying={isPlaying}
+        />
+      )}
       </View>
     );
   }
