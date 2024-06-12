@@ -12,26 +12,27 @@ interface MapComponentProps extends MapViewProps {
   location: { latitude: number; longitude: number } | null;
   soundFiles: SoundFile[];
   onSelectSoundFile: (file: SoundFile) => void;
+  shouldResetLocation: boolean;
 }
 
 const MapComponent: React.ForwardRefRenderFunction<MapView, MapComponentProps> = (
-  { location, soundFiles, onSelectSoundFile, ...props },
+  { location, soundFiles, onSelectSoundFile, shouldResetLocation, ...props },
   ref
 ) => {
   const mapRef = useRef<MapView>(null);
 
   useImperativeHandle(ref, () => mapRef.current);
 
-  useEffect(() => {
-    if (mapRef.current && location) {
-      mapRef.current.animateToRegion({
-        latitude: location.latitude,
-        longitude: location.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    }
-  }, [location]);
+useEffect(() => {
+  if (location && shouldResetLocation) { // Add a condition to check if location exists and shouldResetLocation is true
+    mapRef.current.animateToRegion({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+  }
+}, [location, shouldResetLocation]);
 
   return (
     <View style={styles.container}>

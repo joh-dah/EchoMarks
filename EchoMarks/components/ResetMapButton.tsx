@@ -1,19 +1,20 @@
-// ResetLocationButton.tsx
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface ResetLocationButtonProps {
   onPress: () => void;
+  setShouldResetLocation: (shouldReset: boolean) => void;
 }
 
-const ResetLocationButton: React.FC<ResetLocationButtonProps> = ({ onPress }) => {
+const ResetLocationButton: React.FC<ResetLocationButtonProps> = ({ onPress, setShouldResetLocation }) => {
   const [loading, setLoading] = useState(false);
 
   const handlePress = async () => {
     setLoading(true);
     await onPress();
     setLoading(false);
+    setShouldResetLocation(true); // Set shouldResetLocation to true when the button is pressed
   };
 
   return (

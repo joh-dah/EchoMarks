@@ -1,6 +1,7 @@
 // App.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { Audio } from 'expo-av';
@@ -10,6 +11,7 @@ import AudioMarker from './AudioMarker';
 import AudioControl from './AudioControl';
 import ResetMapButton from './ResetMapButton';
 
+
 export default function App() {
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,38 +20,51 @@ export default function App() {
   const [selectedSoundFile, setSelectedSoundFile] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [sound, setSound] = useState(null);
+  const [shouldResetLocation, setShouldResetLocation] = useState(false);
   const mapRef = useRef(null);
 
- useEffect(() => {
- let locationSubscription;
+useEffect(() => {
+  let locationSubscription;
 
- (async () => {
- let { status } = await Location.requestForegroundPermissionsAsync();
-   if (status !== 'granted') {
-     Alert.alert('Permission to access location was denied');
-     return;
-   }
+  const fetchData = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission to access location was denied');
+        return;
+      }
 
-   let location = await Location.getCurrentPositionAsync({});
-   setLocation(location.coords);
+      const location = await Location.getCurrentPositionAsync({});
+      setLocation(location.coords);
 
-   locationSubscription = await Location.watchPositionAsync(
-     { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval: 10 },
-     (newLocation) => {
-       setLocation(newLocation.coords);
-     }
-   );
- })();
+      locationSubscription = await Location.watchPositionAsync(
+        { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval: 10 },
+        (newLocation) => {
+          setLocation(newLocation.coords);
+        }
+      );
 
- return () => {
-   if (locationSubscription) {
-     locationSubscription.remove();
-   }
-   if (sound) {
-     sound.unloadAsync();
-   }
- };
+      const storedSoundFiles = await AsyncStorage.getItem('soundFiles');
+      if (storedSoundFiles) {
+        setSoundFiles(JSON.parse(storedSoundFiles));
+      }
+    } catch (error) {
+      console.error('Error loading sound files:', error);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    if (locationSubscription) {
+      locationSubscription.remove();
+    }
+    if (sound) {
+      sound.unloadAsync();
+    }
+  };
 }, [sound]);
+
 
 
   const resetToUserLocation = async () => {
@@ -85,6 +100,22 @@ export default function App() {
   };
 
 
+    const saveSoundFilesToStorage = async (files) => {
+      try {
+        await AsyncStorage.setItem('soundFiles', JSON.stringify(files));
+        console.log('Sound files saved successfully');
+      } catch (error) {
+        console.error('Error saving sound files:', error);
+      }
+    };
+
+    // Function to add a new sound file
+    const addSoundFile = async (newSoundFile) => {
+      setSoundFiles([...soundFiles, newSoundFile]);
+      await saveSoundFilesToStorage([...soundFiles, newSoundFile]); // Save updated sound files to AsyncStorage
+    };
+
+
   const handleStartRecording = async () => {
     try {
       console.log('Requesting permissions..');
@@ -118,7 +149,7 @@ export default function App() {
         latitude: location.latitude,
         longitude: location.longitude,
       };
-      setSoundFiles([...soundFiles, newSoundFile]);
+      addSoundFile(newSoundFile);
     }
   };
 
@@ -142,7 +173,9 @@ export default function App() {
     setIsPlaying(false);
   };
 
-  const deleteSoundFile = (file) => {
+/*
+old version
+const deleteSoundFile = (file) => {
     setSoundFiles(soundFiles.filter(f => f !== file));
     if (selectedSoundFile === file) {
       setSelectedSoundFile(null);
@@ -150,7 +183,20 @@ export default function App() {
         sound.unloadAsync();
       }
     }
-  };
+  }; */
+
+    // Function to delete a sound file
+    const deleteSoundFile = (file) => {
+      const updatedSoundFiles = soundFiles.filter((f) => f !== file);
+      setSoundFiles(updatedSoundFiles);
+      saveSoundFilesToStorage(updatedSoundFiles); // Save updated sound files to AsyncStorage
+      if (selectedSoundFile === file) {
+        setSelectedSoundFile(null);
+        if (sound) {
+          sound.unloadAsync();
+        }
+      }
+    };
 
   return (
       <View style={styles.container}>
@@ -159,12 +205,13 @@ export default function App() {
             soundFiles={soundFiles}
             onSelectSoundFile={selectSoundFile}
             ref={mapRef}
+            shouldResetLocation={shouldResetLocation}
           />
         <RecordingButton
           onPress={recording ? handleStopRecording : handleStartRecording}
           recording={!!recording}
         />
-        <ResetMapButton onPress={resetToUserLocation} />
+        <ResetMapButton onPress={resetToUserLocation} setShouldResetLocation={setShouldResetLocation} />
         {soundFiles.map((file, index) => (
           <AudioMarker key={index} coordinate={{ latitude: file.latitude, longitude: file.longitude }} onPress={() => setSelectedSoundFile(file)} />
         ))}
