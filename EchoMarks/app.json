@@ -19,7 +19,13 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBAqM694SmtWVeF8Bo78hJ2UgQY3GFvHlE"
+        }
+      },
+      "package": "com.joh_dah.EchoMarks"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "45154ca2-637c-4425-8964-cbc8797962cd"
+      }
     }
   }
 }

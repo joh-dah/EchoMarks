@@ -5,34 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68dac4a2-8b6a-4d2d-b111-62421419ff2e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/components/App.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/AudioControl.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/AudioMarker.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/RecordingButton.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/ResetMapButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eas.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/MapComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/MapComponent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/babel.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/jsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/App.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/assets/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/AudioRecorder.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/HelloWorld.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/MapComponent.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/router.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/store.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/vue.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../mobile_approach/EchoMarks/app/audio-recorder.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
